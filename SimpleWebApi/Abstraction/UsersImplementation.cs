@@ -121,7 +121,7 @@ namespace SimpleWebApi.Abstraction
                     mySqlConnection.Open();
                     MySqlCommand mySqlCommand = new MySqlCommand(sql, mySqlConnection);
                     var all_data = await mySqlCommand.ExecuteReaderAsync();
-                    Users users = null;
+                    var users = null;
                     while (all_data.Read())
                     {
                         users = new Users
