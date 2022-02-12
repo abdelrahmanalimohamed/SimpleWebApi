@@ -9,7 +9,7 @@ namespace SimpleWebApi.Abstraction
 
         public UsersImplementation()
         {
-            mySqlConnection = new MySqlConnection("Server=localhost;Port=3308;Database=users;Uid=root;Pwd=serverpassword;");
+            mySqlConnection = new MySqlConnection("Server=localhost;Port=3308;Database=users;Uid=root;Pwd=*******;");
          
         }
 
