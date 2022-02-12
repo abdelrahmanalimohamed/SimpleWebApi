@@ -35,7 +35,8 @@ namespace SimpleWebApi.Abstraction
             }
         }
 
-        public string Delete(int id)
+
+        public async Task<string> Delete(int id)
         {
             try
             {
@@ -44,7 +45,7 @@ namespace SimpleWebApi.Abstraction
                     string sql = "delete from users_data where id =  " + id + " ";
                     mySqlConnection.Open();
                     MySqlCommand mySqlCommand = new MySqlCommand(sql, mySqlConnection);
-                    var deleted_check = mySqlCommand.ExecuteNonQuery();
+                    var deleted_check = await mySqlCommand.ExecuteNonQueryAsync();
                     return deleted_check.ToString();
 
                 }
@@ -65,7 +66,7 @@ namespace SimpleWebApi.Abstraction
                 using (mySqlConnection)
                 {
                     string sql = "select * from users_data";
-                    mySqlConnection.Open();
+                 
                     MySqlCommand mySqlCommand = new MySqlCommand(sql, mySqlConnection);
                     var all_data = await mySqlCommand.ExecuteReaderAsync();
                     List<Users> users = new List<Users>();
@@ -89,15 +90,16 @@ namespace SimpleWebApi.Abstraction
             }
         }
 
-        public string Update(int id , string name)
+        public async Task<string> Update(int id , string name)
         {
             try
             {
                 using (mySqlConnection)
                 {
-                    string sql = "update users_data set name  = '" + name + " where id = " + id + " ";
+                    string sql = "update users_data set name  = '" + name + "' where id = " + id + " ";
+                    mySqlConnection.Open();
                     MySqlCommand mySqlCommand = new MySqlCommand(sql, mySqlConnection);
-                    var update_query = mySqlCommand.ExecuteNonQuery();
+                    var update_query = await mySqlCommand.ExecuteNonQueryAsync();
                     return update_query.ToString();
 
 ;                }
@@ -106,6 +108,36 @@ namespace SimpleWebApi.Abstraction
             {
 
                 return ex.Message;
+            }
+        }
+
+        public async Task<Users> ReadUser(int id)
+        {
+            try
+            {
+                using (mySqlConnection)
+                {
+                    string sql = "select * from users_data  where id = " + id + " ";
+                    mySqlConnection.Open();
+                    MySqlCommand mySqlCommand = new MySqlCommand(sql, mySqlConnection);
+                    var all_data = await mySqlCommand.ExecuteReaderAsync();
+                    Users users = null;
+                    while (all_data.Read())
+                    {
+                        users = new Users
+                        {
+                            id = Convert.ToInt32(all_data["id"]),
+                            name = Convert.ToString(all_data["Name"])
+
+                        };
+                    }
+                    return users;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }

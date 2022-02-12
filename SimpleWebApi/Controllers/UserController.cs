@@ -52,6 +52,29 @@ namespace SimpleWebApi.Controllers
             }
         }
 
+        [Route("~/api/updateuser/{id}/{name}")]
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(int id , string name )
+        {
+            try
+            {
+                if (id == 0 || name == null)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    return Ok(await Users.Update(id, name));
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
 
         [Route("~/api/allusers")]
         [HttpGet]
@@ -66,6 +89,39 @@ namespace SimpleWebApi.Controllers
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
               "Error in getting user records");
+            }
+        }
+
+        [Route("~/api/user/{id}")]
+        [HttpGet]
+        public async Task<ActionResult> getuser(int id)
+        {
+            try
+            {
+                return Ok(await Users.ReadUser(id));
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError,
+              "Error in getting user records");
+            }
+        }
+
+
+        [Route("~/api/deleteuser/{id}")]
+        [HttpDelete]
+        public async Task<ActionResult> deleteuser(int id)
+        {
+            try
+            {
+                return Ok(await Users.Delete(id));
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError,
+              "Error in deleting user record");
             }
         }
     }
